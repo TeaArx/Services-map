@@ -1,0 +1,33 @@
+version: '3.3'
+services:
+  map-backend: 
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    container_name: map-backend
+    ports:
+      - "6010:8000"
+    volumes:
+      - map_logs:/opt/app/logs
+    networks:
+      - map-network
+  map-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    container_name: map-frontend
+    ports:
+      - "6020:6020"
+    networks:
+      - map-network
+    depends_on:
+      - map-backend
+
+volumes:
+  map_logs:
+
+networks:
+  map-network:
+    driver: bridge
